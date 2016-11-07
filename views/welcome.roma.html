@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>{{ $appName }}</title>
+		
+		<link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+
+		<style>
+			body {
+				overflow: hidden;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				color: {{ $defColor }};
+				display: table;
+				font-family: 'Lato';
+			}
+			.container {
+				text-align: center;
+				display: table-cell;
+				vertical-align: middle;
+			}
+			.content {
+				text-align: center;
+				display: inline-block;
+			}
+			.text {
+				font-size: 18px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="content">
+				<img src="img/logo.jpg" alt="">
+				<div class="text"><strong>Hi, du hast es geschafft!</strong></div>
+				<div class="text">Mit mir an deiner Seite erstellest du hervoragende Windows Applikationen.</div>
+			</div>
+		</div>
+	</body>
+</html>
