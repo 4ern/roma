@@ -1,18 +1,28 @@
-![roma() AutoIt Framework](http://4ern.de/4ern/wp-content/uploads/2016/11/roma.jpg)
+![roma() AutoIt Framework](http://4ern.de/4ern/wp-content/uploads/2016/11/roma_logo.png)
 
 #roma() Framework for AutoIt 
 **[by 4ern.de](http://www.4ern.de)**
 
 ---
 
-###Kurzbeschreibung
-Die Grundfunktion von roma() ist die Erstellung der AutoIt GUI's durch **HTML/CSS & Javascript** zu ersetzen und das volle potenzial der Webstandards zur Verfügung zu stellen. Die kommunikation zwischen der HMTL GUI/View und AutoIt erfolgt über das Http Protokoll, wofür ich einen minimalen webbrowser für diesen zweck entwickelt habe.
+###Ziel des Frameworks
+- Hauptziel dieses Frameworks ist es GUI's mit HTML, CSS & Javascript erstellen zu können und am besten diese auch Live zu gestalten. Das ganze funktioniert mit 2 Schichten.
+	-- Fontend = HTML,CSS & Javascript
+	-- Backend = AutoIt
+- MVC Entwicklung mit AutoIt
+- Bessere und modernere UDF Verwaltung
+- CGI unterstützung
+- ect.
 
-Bei diesem Framework habe ich mich stark von [**Laravel _PHP_ Framework** ](https://laravel.com/) insperieren lassen und dieses ähnlich aufgebaut.
-
-roma() befindet sich noch in Entwicklung und es ist noch sehr viel zu tun :) 
-Daher gibt es noch keine Dokumentation oder Anwendungsbeispiele.
+Bei diesem Framework habe ich mich stark von [**Laravel _PHP_ Framework** ](https://laravel.com/) insperieren lassen, daher wird jedem wer mit Laravel gearbeitet hat sehr viele Ähnlichkeiten auffallen.
 
 ---
+_roma() befindet sich noch in Entwicklung, Dokumentation oder Anwendungsbeispiele werden schon bald Zurverfügung stehen._
+_Ich bin über jede Unterstützung sehr Dankbar._
 
-Ich bin über jede Unterstützung sehr Dankbar.
+###Lizenz:
+Das Framework steht unter der open-sourced Lizenz MIT-Lizenz.
+
+###Ersteller:
+Eduard Tschernjaew
+from Germany
