@@ -55,17 +55,21 @@ Hier kannst du die Wrapper Direktiven festlegen und die Root Logik anlegen.
 
 #Routing
 ### **$root_get(string 'uri', string 'controller function')**
-uri = url die über ein Link aufgerufen wurde. (GET Request)
+**GET Request**
+uri = url die über ein Link aufgerufen wurde.
+controller Funktion = Funktion die aufgerufen werden soll.
 > **Beispiel:** 
-> URL: `http://localhost:8080/tabelle`
-> `$root_get('tabelle', 'controller_tabelle')`
+	> URL: `http://localhost:8080/tabelle`
+	> `$root_get('tabelle', 'controller_tabelle')`
 
 ### **$root_post(string 'uri', string 'controller function')**
-uri = url die über ein Formular aufgerufen wurde. (POST Request)
+**POST Request**
+uri = url die über ein Formular aufgerufen wurde.
+controller Funktion = Funktion die aufgerufen werden soll.
 > **Beispiel:** 
-> URL: `http://localhost:8080/eintrag`
-> `$root_get('eintrag', 'controller_eintrag')`
-
+	> URL: `http://localhost:8080/eintrag`
+	> `$root_get('eintrag', 'controller_eintrag')`
+	
 ---
 _roma() befindet sich noch in Entwicklung, Dokumentation oder Anwendungsbeispiele werden schon bald Zurverfügung stehen._
 _Ich bin über jede Unterstützung sehr Dankbar._
