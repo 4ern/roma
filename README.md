@@ -15,10 +15,10 @@
 _Bei diesem Framework habe ich mich stark von [**Laravel _PHP_ Framework** ](https://laravel.com/) insperieren lassen, daher wird jedem wer mit Laravel gearbeitet hat sehr viele Ähnlichkeiten auffallen._
 
 #Wie funktioniert das Framework
-In der route Funktion(application.au3) werden die Urls(links) deffiniert und die jeweiligen Controller angesteuert.
+In der route Funktion(application.au3) werden die uris(links) deffiniert und die jeweiligen Controller angesteuert.
 Die Contoller verarbeiten die Daten aus dem Model und übergeben diese wiederum an View(GUI).
 
-#Baumstruktur Erklärung
+#Baumstruktur
 ###config
 hier befinden sich (wie der Name schon sagt) die Anwendungs konfigurationen Dateien.
 
@@ -44,7 +44,7 @@ Dient auch zur Ablage von SQLite, JSON, XML Dateien etc.
 In diesem Ordner befindet sich die gesamte Framework Logik und die Packages(udf).
 **In diesem Order musst du nichts machen, es sei denn du möchtest das Framework modifizieren.
 
-###View
+###views
 Hier befindet sich deine komplette View(GUI) (html, css, js usw.).
 
 ###application.au3
@@ -53,12 +53,26 @@ Hier kannst du die Wrapper Direktiven festlegen und die Root Logik anlegen.
 
 **Alle Dateien sind so gut wie möglich Dokumentiert, sodass ich mir sicher bin das du dich gut zurechtfindest.**
 
+#Routing
+### **$root_get(string 'uri', string 'controller function')**
+uri = url die über ein Link aufgerufen wurde. (GET Request)
+> **Beispiel:** 
+> URL: `http://localhost:8080/tabelle`
+> `$root_get('tabelle', 'controller_tabelle')`
+
+### **$root_post(string 'uri', string 'controller function')**
+uri = url die über ein Formular aufgerufen wurde. (POST Request)
+> **Beispiel:** 
+> URL: `http://localhost:8080/eintrag`
+> `$root_get('eintrag', 'controller_eintrag')`
+
 ---
 _roma() befindet sich noch in Entwicklung, Dokumentation oder Anwendungsbeispiele werden schon bald Zurverfügung stehen._
 _Ich bin über jede Unterstützung sehr Dankbar._
 
 ###Lizenz:
-Das Framework steht unter der open-sourced Lizenz MIT-Lizenz.
+Das Framework steht unter der open-sourced Lizenz.
+MIT-Lizenz.
 
 ###Ersteller:
 Eduard Tschernjaew
