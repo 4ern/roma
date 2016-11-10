@@ -1,3 +1,4 @@
+
 ;----------------------------------------------------------------------------------------------/
 ; Initialisiere die GUI
 ;----------------------------------------------------------------------------------------------/
@@ -13,7 +14,6 @@ func _vendor_roma_core_gui__initail()
 	;----------------------------------------------------------------------------------------------/
 	if $gui_typ = 'browser' then ShellExecute('http://' & $APP('IP') & ':' & $APP('PORT'))
 	Call('_vendor_roma_core_gui__' & $gui_typ)
-
 endfunc
 
 #cs
@@ -50,11 +50,13 @@ func _vendor_roma_core_gui__ie()
 	;		[6] |	exstyle |   Value
 	;----------------------------------------------------------------------------------------------/
 	$aGuiSettings = IniReadSection($ROOT & '\config\gui.ini', 'ie')
+	$style        = (StringLeft( $aGuiSettings[5][1], 1) = '$') ? eval(StringTrimLeft( $aGuiSettings[5][1], 1)) :  $aGuiSettings[5][1]
+	$exStyle      = (StringLeft( $aGuiSettings[6][1], 1) = '$') ? eval(StringTrimLeft( $aGuiSettings[6][1], 1)) :  $aGuiSettings[6][1]
 
 	;----------------------------------------------------------------------------------------------/
 	; Erstellte die GUI
 	;----------------------------------------------------------------------------------------------/
-	$hGUI = GUICreate($APP('NAME'), $aGuiSettings[1][1], $aGuiSettings[2][1], $aGuiSettings[3][1], $aGuiSettings[4][1], $aGuiSettings[5][1], $aGuiSettings[6][1])
+	$hGUI = GUICreate($APP('NAME'), $aGuiSettings[1][1], $aGuiSettings[2][1], $aGuiSettings[3][1], $aGuiSettings[4][1], $style, $exStyle)
 	GUISetOnEvent($GUI_EVENT_CLOSE, '_vendor_roma_core_gui__ie_exit', $hGUI)
 	GUICtrlCreateObj($oIE, 0, 0, $aGuiSettings[1][1], $aGuiSettings[2][1])
 
