@@ -14,18 +14,22 @@
 #ce
 
 ;----------------------------------------------------------------------------------------------/
-; Vendor Packages
+; AutoIt Packages
 ;----------------------------------------------------------------------------------------------/
 #include '..\vendor\autoit\GUIConstantsEx.au3'
+#include '..\vendor\autoit\WindowsConstants.au3'
 #include '..\vendor\autoit\array.au3'
 #include '..\vendor\autoit\date.au3'
 #include '..\vendor\autoit\ie.au3'
-
-#include '..\vendor\trancexx\winHttpTimeFromSystemTime.au3'
-#include '..\vendor\Ward\Json.au3'
 
 ;----------------------------------------------------------------------------------------------/
 ; 4ern Packages
 ;----------------------------------------------------------------------------------------------/
 #include '..\vendor\roma\log.au3'
 #include '..\vendor\roma\lang\language.au3'
+
+;----------------------------------------------------------------------------------------------/
+; Other Packages
+;----------------------------------------------------------------------------------------------/
+#include '..\vendor\trancexx\winHttpTimeFromSystemTime.au3'
+#include '..\vendor\Ward\Json.au3'
