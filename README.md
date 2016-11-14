@@ -61,13 +61,9 @@ Daher dachte ich mir, bevor das Projekt verstaubt und irgendwo in meinem Compute
 
 > *Bei diesem Framework habe ich mich stark von [**Laravel _PHP_ Framework** ](https://laravel.com/) inspirieren lassen, daher werden Laravel-Kenner viele Ähnlichkeiten bemerken.*
 
----
-
 #Funktionsweise
 
 ![enter image description here](http://4ern.de/4ern/wp-content/uploads/2016/11/Zeichnung1.jpg)
-
-----------
 
 
 #Baumstruktur
