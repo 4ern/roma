@@ -167,6 +167,8 @@ Hier kannst du die Wrapper Direktiven festlegen und die Root Logik anlegen.
 
 
 #Routing
+Das Roouting ist eine Art Navigationssystem deiner Applikation und befindet sich in der application.au3.  
+Es ist ganz simpel. Weise einer URI einen Controller zu, damit alles sein Lauf nimmt.
 
 ###GET ROUTE
 ```autoit
@@ -178,10 +180,10 @@ $root_get('uri', 'function')
 
 **Beispiel:** 
 
->**URL:** `http://localhost:8080/tabelle`
->```autoit
->$root_get('tabelle', 'controller_tabelle')
->```
+**URL:** `http://localhost:8080/tabelle`
+```autoit
+$root_get('tabelle', 'controller_tabelle')
+```
 
 ###POST ROUTE
 ```autoit
@@ -192,15 +194,15 @@ $root_post('uri', 'function')
 
 **Beispiel:** 
 
-> **HTML Form**
-> ```html
-><form action="welcome" method="post">
->```
+ **HTML Form**
+```html
+<form action="welcome" method="post">
+```
 
-> **AutoIt roma**
-> ```autoit
->$root_post('welcome', 'welcome_controller')
->```
+ **AutoIt roma**
+```autoit
+$root_post('welcome', 'welcome_controller')
+```
 
 ###ROUTE with Parameter
 
@@ -209,7 +211,7 @@ $root_get('uri{param}', 'function')
 ```
 **Beispiel:** 
 
->**URL:** `http://localhost:8080/page/5`
+**URL:** `http://localhost:8080/page/5`
 
 Basic Parameter
 ```autoit
@@ -228,6 +230,13 @@ func controller_page($id = 1)
     ConsoleWrite('var: $id --> ' & $id)
 endfunc
 ```
+
+
+----------
+
+
+#Views
+
 
 
 
