@@ -14,8 +14,9 @@
 - [Funktionsweise](#funktionsweise)
 - [Baumstruktur](#baumstruktur)
 - [Rooting](#routing)
-    - [GET Request](#get-request)
-    - [POST Request](#post-request)
+    - [GET ROUTE](#get-route)
+    - [POST ROUTE](#post-route)
+    - [ROUTE with Parameter](#route-with-parameter)
 - [ToDo](#todo)
 - [Lizenz](#lizenz)
 - [Packages](#packages)
@@ -167,7 +168,7 @@ Hier kannst du die Wrapper Direktiven festlegen und die Root Logik anlegen.
 
 #Routing
 
-###GET Request
+###GET ROUTE
 ```autoit
 $root_get('uri', 'function')
 ```
@@ -182,7 +183,7 @@ $root_get('uri', 'function')
 >$root_get('tabelle', 'controller_tabelle')
 >```
 
-###POST Request
+###POST ROUTE
 ```autoit
 $root_post('uri', 'function')
 ```
@@ -195,10 +196,40 @@ $root_post('uri', 'function')
 > ```html
 ><form action="welcome" method="post">
 >```
-> **autoIt roma**
+
+> **AutoIt roma**
 > ```autoit
-$root_post('welcome', 'welcome_controller')
+>$root_post('welcome', 'welcome_controller')
+>```
+
+###ROUTE with Parameter
+
+```autoit
+$root_get('uri{param}', 'function')
 ```
+**Beispiel:** 
+
+>**URL:** `http://localhost:8080/page/5`
+
+Basic Parameter
+```autoit
+$root_get('page{id}', 'controller_page')
+
+func controller_page($id)
+    ConsoleWrite('var: $id --> ' & $id)
+endfunc
+```
+
+Optional Parameter
+```autoit
+$root_get('page{id?}', 'controller_page')
+
+func controller_page($id = 1)
+    ConsoleWrite('var: $id --> ' & $id)
+endfunc
+```
+
+
 
 ----------
 ###ToDo
