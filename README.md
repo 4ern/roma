@@ -1,4 +1,4 @@
-#[-> Goto english redme](https://github.com/4ern/roma/blob/master/README_EN.md)
+###[-> Goto english readme](https://github.com/4ern/roma/blob/master/README_EN.md)
 
 ![roma() AutoIt Framework](http://4ern.de/4ern/wp-content/uploads/2016/11/roma_logo.png)
 
@@ -17,6 +17,15 @@
     - [GET ROUTE](#get-route)
     - [POST ROUTE](#post-route)
     - [ROUTE with Parameter](#route-with-parameter)
+- [View](#view)
+    - [View anzeigen](#view-anzeigen)
+    - [Variablen an die View binden](#variablen-an-die-view-binden)
+- [Templating](#templating)
+    - [Layout definieren](#layout-definieren)
+    - [Abschnitte](#abschnitte)
+    - [Daten anzeigen](#daten-anzeigen)
+    - [If Statements](#if-statements)
+    - [Kommentare](#kommentare)
 - [ToDo](#todo)
 - [Lizenz](#lizenz)
 - [Packages](#packages)
@@ -178,8 +187,6 @@ $root_get('uri', 'function')
 - **uri** *string* -  Url die über ein Link aufgerufen wurde.
 - **function** *string* - Funktion die aufgerufen werden soll.
 
-**Beispiel:** 
-
 **URL:** `http://localhost:8080/tabelle`
 ```autoit
 $root_get('tabelle', 'controller_tabelle')
@@ -190,9 +197,7 @@ $root_get('tabelle', 'controller_tabelle')
 $root_post('uri', 'function')
 ```
 - **uri** *string* -  Url die über ein Formular aufgerufen wurde.
-- **function** *string* - Funktion die aufgerufen werden soll.
-
-**Beispiel:** 
+- **function** *string* - Funktion die aufgerufen werden soll. 
 
  **HTML Form**
 ```html
@@ -209,7 +214,6 @@ $root_post('welcome', 'welcome_controller')
 ```autoit
 $root_get('uri{param}', 'function')
 ```
-**Beispiel:** 
 
 **URL:** `http://localhost:8080/page/5`
 
@@ -235,10 +239,126 @@ endfunc
 ----------
 
 
-#Views
+#View
 
+Die Views sind einzelne HTML Dateien die im Ordner rome\View abgelegt werden müssen.
 
+###View anzeigen
+```autoit
+return $View('welcome')
+```
+###Variablen an die View binden
+Um Variablen in der View nutzen zu können, muss die HTML Datei die Endung `.roma.html` haben.
 
+```autoit
+$toView('string', $var)
+```
+**string**: Dekleration der Variable in der View
+**var**: Variablen Wert
+
+```autoit
+Local $Var1 = 'foo'
+Local $aVar2 = ['Hello', 'World', 2, 3, 5]
+
+$toView('var1', $Var1)
+$toView('aVar2', $aVar2)
+return $View('welcome')
+```
+```html
+<p>{{ $var1 }}</p>
+<p>{{ $aVar[1] }}</p>
+```
+
+#Templating
+roma() besitzt eine Template Engine, was dem [Blade Engine](https://laravel.com/docs/5.3/blade) von Laravel stark ähnelt *(jedoch noch nicht ganz so Umfangreich)*.
+
+Damit man das roma() Template Engine nutzen kann, muss die View die Endung `roma.html` haben.
+
+###Layout definieren
+Der große Vorteil an diesem Template Engine ist die Vorlagenvererbung und Erstellungen von Abschnitten(sections). Schauen wir uns das ganze an einem Beispiel an.
+
+Zuerst erstellen wir ein Haupt-Layout, *da die meisten Anwendungen das gleiche allgemeine Layout über verschiedene Seiten hinweg haben*, ist es bequem dieses Layout als einzelne Master View zu definieren.
+
+**layout.roma.html**
+```html
+<html>
+    <head>
+        <title>App Name - @yield('title')</title>
+    </head>
+    <body>
+        @include('sidebar')
+
+        <div class="container">
+            @yield('content')
+        </div>
+        
+        @include('footer')
+    </body>
+</html>
+```
+
+Wie du sehen kannst, wird herkömmliches HTML verwendet. Beachte jedoch die Direktiven `@yield` und `@include`. Mit der yield Direktiven wird der Inhalt eines Abschnittes an diese Stelle gesetzt und mit include wird die gesamte Datei eingebunden.
+
+###Abschnitte
+Wenn du eine untergeordnete View erstellst, muss an der obersten Stelle das übergeordnete Layout mit der Direktiven `@extended` angegeben werden. In unserem Beispiel verwenden wir unser Haupt-Layout.
+
+```html
+@extends('layout')
+
+@section('title', 'Unser Seitentitel')
+
+@section('sidebar')
+    <p>Hier bfindet sich unser Menü</p>
+@endsection
+
+@section('content')
+    <p>und nochmal der gesamte Inhalt.</p>
+@endsection
+```
+
+###Daten anzeigen
+
+Um eine Variable anzuzeigen, musst diese der View zuweisen, wie das geht wird im Abschnitt **[Variablen an die View binden](#variablen-an-die-view-binden)**
+
+Variable in der View anzeigen
+
+    Hallo, {{ $name }}
+   
+ Variable anzeigen, wenn diese nicht existiert dann ein Default Wert anzeigen
+ 
+
+    Hallo, {{ $name or 'Nutzer'}}
+  
+Viele Javascript Frameworks nutzen auch die geschweiften Klammern als Variablen Scopes. Damit das Javascript Framework ich mit roma() Template Engine kolidiert, verwende vor deinen Javascript Variblen das @ Zeichen.
+
+    Hallo, @{{ name }}
+    
+
+###If Statements
+
+Um eine If Abfrage zu erstellen, benötigst du folgende Direktiven: `@if`, `@else` und `@endif`. `@elseif` wird aktuell nicht unterstützt.
+
+```html
+@if($var = 'foo')
+    <p>Wahr</p>
+@else
+    <p>Falsch</p>
+@endif
+```
+
+Für eine negative(not) Abfrage verwende die Direktiven `@unless` und `@endunles`
+```html
+@unless($var = 'foo')
+    <p>Falsch</p>
+@else
+    <p>Wahr</p>
+@endunles
+```
+
+###Kommentare
+Du kannst auch Kommentare in deiner View nutzen. Diese haben gegenüber den HTML Kommentaren den Vorteil, dass diese bei Erstellung der View aus der View entfernt werden.
+
+    {{-- Das ist ein Kommentar --}}
 
 ----------
 ###ToDo
