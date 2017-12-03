@@ -133,7 +133,7 @@ func _vendor_roma_core_http__request($action = NULL)
 	;----------------------------------------------------------------------------------------------/
 	$aRequest = StringSplit(StringSplit($sData, @lf, 2)[0], ' ', 2)	
 	if (StringLen($aRequest[0]) == 0) then 
-		_vendor_roma_core_http_response_data('html', '' , 403)
+			_vendor_roma_core_http_response_data('text/html', '' , 403)
 		return SetError(0, 0, 0)
 	endif
 
@@ -289,7 +289,8 @@ func _vendor_roma_core_http_response_data($MIME_TYPE, $data = False , $responseC
 	; Erstelle Paket
 	;----------------------------------------------------------------------------------------------/
 	$sName   = StringFormat('%s - VERSION:%s | (roma AutoIt Framework)', $APP('NAME'), $APP('VERSION'))
-	$sPacket =  'HTTP/1.1' & $responseCode &' '& $responseMsg & @CRLF
+
+	$sPacket =  'HTTP/1.1 ' & $responseCode &' '& $responseMsg & @CRLF
 	$sPacket &= 'Server: ' & $sName & @CRLF
 	$sPacket &= 'Connection: keep-alive' & @CRLF
 	$sPacket &= 'Accept-Ranges: bytes' & @CRLF

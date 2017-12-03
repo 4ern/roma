@@ -20,7 +20,6 @@
 #include '..\vendor\autoit\WindowsConstants.au3'
 #include '..\vendor\autoit\array.au3'
 #include '..\vendor\autoit\date.au3'
-#include '..\vendor\autoit\ie.au3'
 
 ;----------------------------------------------------------------------------------------------/
 ; 4ern Packages
