@@ -1,11 +1,9 @@
-###[-> Goto english readme](https://github.com/4ern/roma/blob/master/README_EN.md)
-
-![roma() AutoIt Framework](http://4ern.de/4ern/wp-content/uploads/2016/11/roma_logo.png)
+### [-> Goto english readme](https://github.com/4ern/roma/blob/master/README_EN.md)
 
 **[by 4ern.de](http://www.4ern.de)**
 
 
-#Index
+# Index
 
 - [Vorwort](#vorwort)
     - [Ziel des Frameworks](#ziel-des-frameworks)
@@ -34,12 +32,12 @@
 
 ---
 
-#Vorwort
+# Vorwort
 Ich nutze AutoIt schon lange nicht mehr zum purem Automatisieren von Anwendungen, sodern um komplexe eigenständige Anwendungen zu entwickeln.  Besonders stört mich dabei, dass die Logik in AutoIt sehr schwer von der Präsentation zu trennen ist und die Standard GUI-Elememte sehr unflexibel sind. Will man etwas Anspruchvolleres erstellen, muss man sich mit GDI rumschlagen und zig Zeilen Code für simple Effekte oder Animationen schreiben.
 
 Mit diesen Gedanken im Kopf habe ich mich nach Alternativen umgeschaut und leider nichts gefunden, was mich meinen Vorstellungen entsprach. Deshalb habe ich mir eine eigene Lösung überlegt, um die Logik von der Präsentation zu trennen und zudem HTML & CSS in meiner GUI in vollem Umfang nutzen zu können. Daraus entstand die Idee zu diesem Framework.
 
-###Ziel des Frameworks
+### Ziel des Frameworks
 
 - MVC Entwicklung mit AutoIt
 - HTML & CSS GUI in AutoIt
@@ -47,13 +45,13 @@ Mit diesen Gedanken im Kopf habe ich mich nach Alternativen umgeschaut und leide
 - CLI-Unterstützung like [Laravel Artisan](https://laravel.com/docs/5.0/artisan)
 - schnellere und struktuiertere Entwicklung von Anwendungen
 
-###Unterstützung
+### Unterstützung
 Ich habe leider nicht mehr viel Zeit für das Projekt, da ich zum zweiten Mal Nachwuchs bekommen habe und nun ein Job Wechsel bevorsteht, bei dem ich mich intensiv mit AngularJs auseinander setzen muss. 
 Daher dachte ich mir, bevor das Projekt verstaubt und irgendwo in meinem Computer untergeht, teile ich es und bitte euch um Unterstützung, dieses Projekt weiterzuentwickeln.
 
 > Das Framework dient in erster Linie zur Entwicklung von eigenständigen Applikationen.
 
-###Inhalt des Frameworks
+### Inhalt des Frameworks
 
 - Alle notwendigen Settings sind vorkonfiguriert, man kann sofort mit der Logik oder der View beginnen.
 - Alle Settings sind an einem Ort.
@@ -74,12 +72,12 @@ Daher dachte ich mir, bevor das Projekt verstaubt und irgendwo in meinem Compute
 
 > *Bei diesem Framework habe ich mich stark von [**Laravel _PHP_ Framework** ](https://laravel.com/) inspirieren lassen, daher werden Laravel-Kenner viele Ähnlichkeiten bemerken.*
 
-#Funktionsweise
+# Funktionsweise
 
 ![enter image description here](http://4ern.de/4ern/wp-content/uploads/2016/11/Zeichnung1.jpg)
 
 
-#Baumstruktur
+# Baumstruktur
 
 ```html
 ├── config
@@ -175,11 +173,11 @@ Hier kannst du die Wrapper Direktiven festlegen und die Root Logik anlegen.
 ----------
 
 
-#Routing
+# Routing
 Das Roouting ist eine Art Navigationssystem deiner Applikation und befindet sich in der application.au3.  
 Es ist ganz simpel. Weise einer URI einen Controller zu, damit alles sein Lauf nimmt.
 
-###GET ROUTE
+### GET ROUTE
 ```autoit
 $root_get('uri', 'function')
 ```
@@ -192,7 +190,7 @@ $root_get('uri', 'function')
 $root_get('tabelle', 'controller_tabelle')
 ```
 
-###POST ROUTE
+### POST ROUTE
 ```autoit
 $root_post('uri', 'function')
 ```
@@ -209,7 +207,7 @@ $root_post('uri', 'function')
 $root_post('welcome', 'welcome_controller')
 ```
 
-###ROUTE with Parameter
+### ROUTE with Parameter
 
 ```autoit
 $root_get('uri{param}', 'function')
@@ -239,15 +237,15 @@ endfunc
 ----------
 
 
-#View
+# View
 
 Die Views sind einzelne HTML Dateien die im Ordner rome\View abgelegt werden müssen.
 
-###View anzeigen
+### View anzeigen
 ```autoit
 return $View('welcome')
 ```
-###Variablen an die View binden
+### Variablen an die View binden
 Um Variablen in der View nutzen zu können, muss die HTML Datei die Endung `.roma.html` haben.
 
 ```autoit
@@ -269,12 +267,12 @@ return $View('welcome')
 <p>{{ $aVar[1] }}</p>
 ```
 
-#Templating
+# Templating
 roma() besitzt eine Template Engine, was dem [Blade Engine](https://laravel.com/docs/5.3/blade) von Laravel stark ähnelt *(jedoch noch nicht ganz so Umfangreich)*.
 
 Damit man das roma() Template Engine nutzen kann, muss die View die Endung `roma.html` haben.
 
-###Layout definieren
+### Layout definieren
 Der große Vorteil an diesem Template Engine ist die Vorlagenvererbung und Erstellungen von Abschnitten(sections). Schauen wir uns das ganze an einem Beispiel an.
 
 Zuerst erstellen wir ein Haupt-Layout, *da die meisten Anwendungen das gleiche allgemeine Layout über verschiedene Seiten hinweg haben*, ist es bequem dieses Layout als einzelne Master View zu definieren.
@@ -299,7 +297,7 @@ Zuerst erstellen wir ein Haupt-Layout, *da die meisten Anwendungen das gleiche a
 
 Wie du sehen kannst, wird herkömmliches HTML verwendet. Beachte jedoch die Direktiven `@yield` und `@include`. Mit der yield Direktiven wird der Inhalt eines Abschnittes an diese Stelle gesetzt und mit include wird die gesamte Datei eingebunden.
 
-###Abschnitte
+### Abschnitte
 Wenn du eine untergeordnete View erstellst, muss an der obersten Stelle das übergeordnete Layout mit der Direktiven `@extended` angegeben werden. In unserem Beispiel verwenden wir unser Haupt-Layout.
 
 ```html
@@ -316,7 +314,7 @@ Wenn du eine untergeordnete View erstellst, muss an der obersten Stelle das übe
 @endsection
 ```
 
-###Daten anzeigen
+### Daten anzeigen
 
 Um eine Variable anzuzeigen, musst diese der View zuweisen, wie das geht wird im Abschnitt **[Variablen an die View binden](#variablen-an-die-view-binden)**
 
@@ -334,7 +332,7 @@ Viele Javascript Frameworks nutzen auch die geschweiften Klammern als Variablen 
     Hallo, @{{ name }}
     
 
-###If Statements
+### If Statements
 
 Um eine If Abfrage zu erstellen, benötigst du folgende Direktiven: `@if`, `@else` und `@endif`. `@elseif` wird aktuell nicht unterstützt.
 
@@ -355,30 +353,30 @@ Für eine negative(not) Abfrage verwende die Direktiven `@unless` und `@endunles
 @endunles
 ```
 
-###Kommentare
+### Kommentare
 Du kannst auch Kommentare in deiner View nutzen. Diese haben gegenüber den HTML Kommentaren den Vorteil, dass diese bei Erstellung der View aus der View entfernt werden.
 
     {{-- Das ist ein Kommentar --}}
 
 ----------
-###ToDo
+### ToDo
 - [ ] Loop Funktion in Template.au3
 - [ ] CLI-Modul like Laravel Artisan
 - [ ] Lösungsansätze, wie das Framework optimal kompiliert werden kann, sodass im kompilierten Zustand alle Dateien zur Verfügung stehen.
 - [ ] Framework Tests & Bugfixes
 
-###Lizenz
+### Lizenz
 Das Framework steht unter der Open-Source Lizenz.
 [MIT-Lizenz](https://github.com/4ern/roma/blob/master/LICENSE.md).
 
-###Packages
+### Packages
 -  Systemtime to Http Tie by **trancexx**
 -  JSON Package by **Ward**
 
-###Übersetzung
+### Übersetzung
 - german to english by **Aladan**
 
-###Ersteller
+### Ersteller
 [4ern.de - Eduard Tschernjaew](http://4ern.de/)
 
 
