@@ -12,6 +12,7 @@
 |
 #ce
 #include-once
+#include '..\config\app.au3'
 #include '..\config\packages.au3'
 #include '..\config\aliases.au3'
 #include '..\config\onStart.au3'
