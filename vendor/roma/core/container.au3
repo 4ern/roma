@@ -44,7 +44,7 @@ func _vendor_roma_core_container__app($key = default, $action = 'get')
 			; 	- Ja: Ändere den Wert
 			;	- Nein: Erstelle einen neuen Key
 			;----------------------------------------------------------------------------------------------/
-			for $i = 1 to Ubound($key) -1
+			for $i = 0 to Ubound($key) -1
 				if $oAPP.Exists($key[$i][0]) then 
 					$oAPP($key[$i][0]) = $key[$i][1]
 					ContinueLoop
@@ -101,7 +101,7 @@ func _vendor_roma_core_container_gui($key = default, $action = 'get')
 			; 	- Ja: Ändere den Wert
 			;	- Nein: Erstelle einen neuen Key
 			;----------------------------------------------------------------------------------------------/
-			for $i = 1 to Ubound($key) -1
+			for $i = 0 to Ubound($key) -1
 				if $oGUI.Exists($key[$i][0]) then 
 					$oGUI($key[$i][0]) = $key[$i][1]
 					ContinueLoop

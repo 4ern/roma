@@ -6,13 +6,18 @@ func _vendor_roma_core_gui__initail()
 	;----------------------------------------------------------------------------------------------/
 	; Ermittle welche GUI genutzt werden soll
 	;----------------------------------------------------------------------------------------------/
-	$gui_typ = IniRead($ROOT & '\config\gui.ini', 'gui-typ', $APP('DEBUG') = 'true' ? 'develop' : 'production', 'browser')
+	$aGui    = _config_app__gui_type()
+	$typ     = Number($APP('DEBUG') = 'true' ? 1: 0)
+	$gui_typ = $aGui[$typ][1]
 
 	;----------------------------------------------------------------------------------------------/
 	; execute gui function
 	;----------------------------------------------------------------------------------------------/
-	if $gui_typ = 'browser' then ShellExecute('http://' & $APP('IP') & ':' & $APP('PORT'))
-	Call('_vendor_roma_core_gui__' & $gui_typ)
+	if $gui_typ = 'browser' then 
+		ShellExecute('http://' & $APP('IP') & ':' & $APP('PORT'))
+	else 
+		Call('_vendor_roma_core_gui__' & $gui_typ)
+	endif
 	
 	;----------------------------------------------------------------------------------------------/
 	; Prüfe ob der Controller/Funktion existiert.
@@ -32,7 +37,7 @@ endfunc
 | Erstellung einer AutoIt GUI mit IE Embedded
 |
 #ce
-func _vendor_roma_core_gui__ie()
+func _vendor_roma_core_gui__ie_embedded()
 	
 	;----------------------------------------------------------------------------------------------/
 	; Setze GUIONEVENT
@@ -56,16 +61,16 @@ func _vendor_roma_core_gui__ie()
 	;		[5] |	style 	|   Value
 	;		[6] |	exstyle |   Value
 	;----------------------------------------------------------------------------------------------/
-	$aGuiSettings = IniReadSection($ROOT & '\config\gui.ini', 'ie')
-	$style        = (StringLeft( $aGuiSettings[5][1], 1) = '$') ? eval(StringTrimLeft( $aGuiSettings[5][1], 1)) :  $aGuiSettings[5][1]
-	$exStyle      = (StringLeft( $aGuiSettings[6][1], 1) = '$') ? eval(StringTrimLeft( $aGuiSettings[6][1], 1)) :  $aGuiSettings[6][1]
+	$aGuiSettings = _config_app__gui_settings()
+	$style        = (StringLeft( $aGuiSettings[4][1], 1) = '$') ? eval(StringTrimLeft( $aGuiSettings[4][1], 1)) :  $aGuiSettings[4][1]
+	$exStyle      = (StringLeft( $aGuiSettings[5][1], 1) = '$') ? eval(StringTrimLeft( $aGuiSettings[5][1], 1)) :  $aGuiSettings[5][1]
 
 	;----------------------------------------------------------------------------------------------/
 	; Erstellte die GUI
 	;----------------------------------------------------------------------------------------------/
-	$hGUI = GUICreate($APP('NAME'), $aGuiSettings[1][1], $aGuiSettings[2][1], $aGuiSettings[3][1], $aGuiSettings[4][1], $style, $exStyle)
+	$hGUI = GUICreate($APP('NAME'), $aGuiSettings[0][1], $aGuiSettings[1][1], $aGuiSettings[2][1], $aGuiSettings[3][1], $style, $exStyle)
 	GUISetOnEvent($GUI_EVENT_CLOSE, '_vendor_roma_core_gui__exit', $hGUI)
-	GUICtrlCreateObj($oIE, 0, 0, $aGuiSettings[1][1], $aGuiSettings[2][1])
+	GUICtrlCreateObj($oIE, 0, 0, $aGuiSettings[0][1], $aGuiSettings[1][1])
 
 	;----------------------------------------------------------------------------------------------/
 	; Zeige die GUI an 
@@ -75,8 +80,7 @@ func _vendor_roma_core_gui__ie()
 	;----------------------------------------------------------------------------------------------/
 	; Navigiere zur IP
 	;----------------------------------------------------------------------------------------------/
-	$url = 'http://' & $APP('IP') & ':' & $APP('PORT')
-	$oIE.navigate($url)
+	$oIE.navigate('http://' & $APP('IP') & ':' & $APP('PORT'))
 
 endfunc
 

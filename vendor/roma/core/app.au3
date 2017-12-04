@@ -19,14 +19,12 @@ func _vendor_roma_core_app__initial()
 	;----------------------------------------------------------------------------------------------/
 	; Übernehme APP Einstellungen
 	;----------------------------------------------------------------------------------------------/
-	Local $aAppSettings = IniReadSection($ROOT & '/config/app.ini', 'app-settings')
-	$APP($aAppSettings, 'set')
+	$APP(_config_app__app_settings(), 'set')
 
 	;----------------------------------------------------------------------------------------------/
 	; Übernehme GUI Einstellungen
 	;----------------------------------------------------------------------------------------------/
-	Local $aGuiSettings = IniReadSection($ROOT & '/config/app.ini', 'gui-settings')
-	$GUI($aGuiSettings, 'set')
+	$GUI(_config_app__autoit_options(), 'set')
 
 	;----------------------------------------------------------------------------------------------/
 	; Setze AutoIt Optionen
