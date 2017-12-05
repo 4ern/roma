@@ -1,37 +1,25 @@
 ;----------------------------------------------------------------------------------------------/
 ; Set your global application settings
 ;----------------------------------------------------------------------------------------------/
-func _config_app__app_settings()
-    
-    local $aReturn[][] = [ _ 
-        ['NAME', 'roma() - AutoIt-Framework (by 4ern.de)' ], _
-        ['VERSION', '1.0.0.1' ], _ 
-        ['BETA', '1.0.0.1' ], _ 
-        ['LANG', 'de_DE' ], _ 
-        ['DEBUG', false ], _ 
-        ['IP', '127.0.0.1' ], _ 
-        ['PORT', 8080 ], _ 
-        ['LOG', 'weekly' ] _ 
-    ]
 
-    return $aReturn
-endfunc
+$roma_app.NAME    = 'roma() - AutoIt-Framework (by 4ern.de)'
+$roma_app.VERSION = '1.0.0.1'
+$roma_app.BETA    = '1.0.0.1'
+$roma_app.LANG    = 'de_DE'
+$roma_app.DEBUG   = false
+$roma_app.IP      = '127.0.0.1'
+$roma_app.PORT    = 8080
+$roma_app.LOG     = 'weekly'
 
 ;----------------------------------------------------------------------------------------------/
 ; Set your Opt-Settings
 ;----------------------------------------------------------------------------------------------/
-func _config_app__autoit_options()
 
-    local $aReturn[][] = [ _ 
-        ['MustDeclareVars', 0 ], _
-        ['TCPTimeout', 100 ], _ 
-        ['TrayAutoPause', 0 ], _ 
-        ['TrayIconDebug', 0 ], _ 
-        ['TrayIconHide', 0 ] _ 
-    ]
-
-    return $aReturn
-endfunc
+$roma.addOpt('MustDeclareVars', 0)
+$roma.addOpt('TCPTimeout', 100)
+$roma.addOpt('TrayAutoPause', 0)
+$roma.addOpt('TrayIconDebug', 0)
+$roma.addOpt('TrayIconHide', 0)
 
 ;----------------------------------------------------------------------------------------------/
 ; Set Gui for your Application
@@ -40,15 +28,9 @@ endfunc
 ; 'ie_embedded'	-> Application use internet explorer
 ;		
 ;----------------------------------------------------------------------------------------------/
-func _config_app__gui_type()
 
-    local $aReturn[][] = [ _ 
-        ['production', 'ie_embedded' ], _
-        ['develop', 'browser' ] _ 
-    ]
-
-    return $aReturn
-endfunc
+$roma_app.gui_production = 'ie_embedded'
+$roma_app.gui_develop    = 'browser'
 
 ;----------------------------------------------------------------------------------------------/
 ; AutoIt GUI Settings
