@@ -11,6 +11,7 @@
 |  Wenn du eine Funktion direkt beim Start ausführen möchtest, dann nutze bitte die Datei "config\onStart.au3".
 |
 #ce
+
 #include-once
 #include '..\config\app.au3'
 #include '..\config\packages.au3'
