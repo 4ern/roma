@@ -1,7 +1,6 @@
 ;----------------------------------------------------------------------------------------------/
 ; Set your global application settings
 ;----------------------------------------------------------------------------------------------/
-
 $roma_app.NAME    = 'roma() - AutoIt-Framework (by 4ern.de)'
 $roma_app.VERSION = '1.0.0.1'
 $roma_app.BETA    = '1.0.0.1'
@@ -13,13 +12,12 @@ $roma_app.LOG     = 'weekly'
 
 ;----------------------------------------------------------------------------------------------/
 ; Set your Opt-Settings
-;----------------------------------------------------------------------------------------------/
-
-$roma.addOpt('MustDeclareVars', 0)
-$roma.addOpt('TCPTimeout', 100)
-$roma.addOpt('TrayAutoPause', 0)
-$roma.addOpt('TrayIconDebug', 0)
-$roma.addOpt('TrayIconHide', 0)
+;----------------------------------------------------------------------------------------------
+$roma.option.add('MustDeclareVars', 0)
+$roma.option.add('TCPTimeout', 100)
+$roma.option.add('TrayAutoPause', 0)
+$roma.option.add('TrayIconDebug', 0)
+$roma.option.add('TrayIconHide', 0)
 
 ;----------------------------------------------------------------------------------------------/
 ; Set Gui for your Application
@@ -28,9 +26,8 @@ $roma.addOpt('TrayIconHide', 0)
 ; 'ie_embedded'	-> Application use internet explorer
 ;		
 ;----------------------------------------------------------------------------------------------/
-
-$roma_app.gui_production = 'ie_embedded'
-$roma_app.gui_develop    = 'browser'
+$roma_app.gui.production = 'ie_embedded'
+$roma_app.gui.develop    = 'browser'
 
 ;----------------------------------------------------------------------------------------------/
 ; AutoIt GUI Settings
