@@ -101,7 +101,9 @@ func _meth_set_namespace($this)
 	local $aFileList = _FileListToArrayRec('./dist',  '*.class.au3', 1, 1)
 	
     for $i = 1 to UBound($aFileList) -1
-		$sFile = FileRead('dist\' & $aFileList[$i])
+
+		$fOpen = FileOpen('dist\' & $aFileList[$i], 2)
+		$sFile = FileRead($fOpen)
 		
 		; get namespace
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
@@ -131,6 +133,8 @@ func _meth_set_namespace($this)
 			$s_method = StringReplace($a_method[0], $a_method[2], $namespace & '__' & $a_method[2])
 			$sFile = StringReplace($sFile, $a_method[0], $s_method)
 		Next
+
+		FileWrite($fOpen, $sFile)
 	next
 
 endfunc
