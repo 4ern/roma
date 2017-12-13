@@ -3,6 +3,7 @@
 #include "..\..\Autoit\Array.au3"
 #include "..\..\AspirinJunkie\JSON.au3"
 #include '..\..\AutoItObject\AutoItObject.au3'
+#include '..\helper_functions.au3'
 
 global $roma_compiler = obj_compiler()
 
@@ -23,17 +24,17 @@ func obj_compiler()
 	; ───────────────────────────────────────────────────────────────────────────────────────────────
 	with $this
 
-		.AddProperty('a_project_files', $ELSCOPE_PRIVATE)
-		.AddProperty('s_compiler_path', $ELSCOPE_PRIVATE, @ScriptDir & '\dist\')
-		.AddProperty('s_exclude_files', $ELSCOPE_PRIVATE, 'README.md;README_EN.MD;LICENSE;.gitignore;test.au3;.DS_Store;compiler.json;compiler.class.au3')
-		.AddProperty('s_exclude_folder', $ELSCOPE_PRIVATE, '.git;storage;dist')
+		.AddProperty('a_project_files', $ELSCOPE_READONLY, __Array())
+		.AddProperty('s_compiler_path', $ELSCOPE_READONLY, @ScriptDir & '\dist\')
+		.AddProperty('s_exclude_files', $ELSCOPE_READONLY, 'README.md;README_EN.MD;LICENSE;.gitignore;test.au3;.DS_Store;compiler.json;compiler.class.au3;*.isn')
+		.AddProperty('s_exclude_folder', $ELSCOPE_READONLY, '.git;storage;dist')
 		
 		; methods before run script
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
 		.AddMethod('__default__', '__constructor')
-		.AddMethod('get_project_files', '_meth_get_project_files', true)
-		.AddMethod('copy_files', '_meth_copy_files', true)
-		.AddMethod('set_namespace', '_meth_set_namespace', true)
+		.AddMethod('get_project_files', '_meth_get_project_files')
+		.AddMethod('copy_files', '_meth_copy_files')
+		.AddMethod('set_namespace', '_meth_set_namespace')
 
 	endwith
 
@@ -46,9 +47,9 @@ endfunc
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func __constructor($this)
 
-	;~ $this.get_project_files
-	;~ $this.copy_files
-	$this.set_namespace
+	$this.get_project_files()
+	$this.copy_files()
+	$this.set_namespace()
 
 endfunc
 
@@ -56,19 +57,15 @@ endfunc
  Method: 		Private
  @return: 		void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
-func _meth_get_project_files($this)
-
+func _meth_get_project_files($this)	
 	local $aFileList = _FileListToArrayRec('.', '*|' & $this.s_exclude_files &'|' & $this.s_exclude_folder, 1, 1)
-	local $project_files[UBound($aFileList)][3]
+	local $aProjectFiles = __Array()
+	For $i = 1 To $aFileList[0]
+		_ArrayAdd($aProjectFiles, _oFile($aFileList[$i]))
+	Next
 
-	; create array with path and modified date
-	; ───────────────────────────────────────────────────────────────────────────────────────────────
-	for $i = 1 to UBound($aFileList) -1
-		$project_files[$i][0] = $aFileList[$i]
-		$project_files[$i][1] = FileGetTime($aFileList[$i], 0, 1)
-	next
-
-	$this.a_project_files = $project_files
+	$this.a_project_files = $aProjectFiles
+	Return $this
 endfunc
 
 #cs :: copy files to dist
@@ -76,20 +73,16 @@ endfunc
  @return:      void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_copy_files($this)
-	
-	; copy files if modified
-	; ───────────────────────────────────────────────────────────────────────────────────────────────
-	for $i = 0 to  UBound($this.a_project_files) -1
-		if $this.a_project_files[$i][2] <> 0 then
-			FileCopy($this.a_project_files[$i][0], $this.s_compiler_path & $this.a_project_files[$i][0], 8 + 1)
-		endif
-	next
 
-	; check if storage dir exists
-	; if not exists = create dir
-	; ───────────────────────────────────────────────────────────────────────────────────────────────
-	if (FileExists($this.s_compiler_path & 'storage') = 0 ) then DirCreate($this.s_compiler_path & 'storage')
+	For $item in $this.a_project_files
+		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
+	Next
 	
+	If Not FileExists($this.s_compiler_path & 'storage') then
+		DirCreate($this.s_compiler_path & 'storage')
+	EndIf
+		
+	Return $this
 endfunc
 
 #cs :: get all *.class.au3 files
@@ -98,19 +91,22 @@ endfunc
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_set_namespace($this)
 
-	local $aFileList = _FileListToArrayRec('./dist',  '*.class.au3', 1, 1)
-	
-    for $i = 1 to UBound($aFileList) -1
-
-		$fOpen = FileOpen('dist\' & $aFileList[$i], 2)
-		$sFile = FileRead($fOpen)
+	For $file in $this.a_project_files
+		If Not StringRegExp($file.name, '(?i)\.class\.au3$') Then ContinueLoop
+		
+		local $hFile = FileOpen('dist\' & $file.name)
+		local $sFile = FileRead($hFile)
+		If @error Then
+			ConsoleWrite(StringFormat('Error reading file "%s": @error = %d, @extended = %d', $file.name, @error, @extended) & @CRLF)
+			ContinueLoop
+		EndIf
 		
 		; get namespace
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
 		local $aNamespace = StringRegExp($sFile,'(;use.)(.*)',2)
 		if IsArray($aNamespace) = 0 then ContinueLoop
 		local $sNamespace = $aNamespace[2]
-
+		
 		; Bringe alle addmethod in eine einheitliche form
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
 		local $pattern  = '(?i)(.addmethod\()(.*)'
@@ -121,8 +117,6 @@ func _meth_set_namespace($this)
 			$sFile = StringReplace($sFile, $a_method[0], StringStripWs($a_method[0], 8))
 		next
 
-		ConsoleWrite($sFile)
-
 		; set namespcae
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
 		local $pattern = '(?i)(\.addmethod\(.\w*.{3})(\w*)(?:.\))|(?:_AutoItObject_AddMethod\(\$\w*.{2}\w*.{3})(\w*)(?:.\))'
@@ -130,11 +124,15 @@ func _meth_set_namespace($this)
 
 		For $i = 0 to UBound($a_methods) -1
 			$a_method = $a_methods[$i]
-			$s_method = StringReplace($a_method[0], $a_method[2], $namespace & '__' & $a_method[2])
+			$s_method = StringReplace($a_method[0], $a_method[2], '_' & $sNamespace & '__' & $a_method[2])
 			$sFile = StringReplace($sFile, $a_method[0], $s_method)
 		Next
 
-		FileWrite($fOpen, $sFile)
-	next
+		Local $hFile = FileOpen('dist\' & $file.name, 2)
+		FileWrite($hFile, $sFile)
+		FileClose($hFile)
+	Next
+	
+	Return $this
 
 endfunc
