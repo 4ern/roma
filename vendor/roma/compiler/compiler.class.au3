@@ -200,10 +200,11 @@ func _meth_set_namespace($this)
 		
 		ConsoleWrite($sFile)
 
+
 		; set namespcae
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
-		local $pattern = '(?i)(\.addmethod\(.\w*.{3})(\w*)(?:.\))|(?:_AutoItObject_AddMethod\(\$\w*.{2}\w*.{3})(\w*)(?:.\))'
-		local $a_methods = StringRegExp( StringStripWS($sFile, 8), $pattern, 4)
+		;~ local $pattern = '(?i)(\.addmethod\(.\w*.{3})(\w*)(?:.\))|(?:_AutoItObject_AddMethod\(\$\w*.{2}\w*.{3})(\w*)(?:.\))'
+		;~ local $a_methods = StringRegExp( StringStripWS($sFile, 8), $pattern, 4)
 
 		For $i = 0 to UBound($a_methods) -1
 			$a_method = $a_methods[$i]
