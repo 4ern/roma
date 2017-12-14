@@ -23,6 +23,7 @@ func obj_compiler()
 	; ───────────────────────────────────────────────────────────────────────────────────────────────
 	with $this
 
+		.AddProperty('_project_title', $ELSCOPE_READONLY, 'Roma()')
 		.AddProperty('a_project_files', $ELSCOPE_READONLY, $roma_helper.Array())
 		.AddProperty('s_compiler_path', $ELSCOPE_READONLY, @ScriptDir & '\dist\')
 		.AddProperty('s_exclude_files', $ELSCOPE_READONLY, 'README.md;README_EN.MD;LICENSE;.gitignore;test.au3;.DS_Store;compiler.json;compiler.class.au3;*.isn')
@@ -66,6 +67,7 @@ func _meth_get_project_files($this)
 	Next
 
 	$this.a_project_files = $aProjectFiles
+	
 	
 	Return $this
 	
@@ -130,6 +132,7 @@ func _meth_set_namespace($this)
 		$pattern = '(?i)(\.addmethod\(.\w*.{3})(\w*)(?:.\))|(?:_AutoItObject_AddMethod\(\$\w*.{2}\w*.{3})(\w*)(?:.\))'
 		$a_methods = StringRegExp( StringStripWS($sFile, 8), $pattern, 4)
 
+
 		For $i = 0 to UBound($a_methods) -1
 			$a_method = $a_methods[$i]
 			$s_method = StringReplace($a_method[0], $a_method[2], '_' & $sNamespace & '__' & $a_method[2], -1)
@@ -137,7 +140,7 @@ func _meth_set_namespace($this)
 		Next
 
 		Local $hFile = FileOpen('dist\' & $file.name, 2)
-		FileWrite($hFile, $sFile)
+;~ 		FileWrite($hFile, $sFile)
 		FileClose($hFile)
 
 	Next

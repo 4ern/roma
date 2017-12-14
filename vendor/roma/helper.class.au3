@@ -13,6 +13,7 @@ Func _Helper__new()
 	local $class = _AutoItObject_Class()
 	With $class		
 		.AddMethod('Array', '_Helper__array')
+		.AddMethod('ArrayInfo', '_Helper__arrayinfo')
 		.AddMethod('Dict',  '_Helper__dict')
 		.AddMethod('TypeOf', '_Helper__typeof')
 		
@@ -25,6 +26,36 @@ EndFunc
 Func _Helper__array($oSelf)
 	local $aArray[0]
 	Return $aArray
+EndFunc
+
+
+Func _Helper__arrayinfo($oSelf, ByRef $aArray)
+	If Not VarGetType($aArray) = 'Array' Then
+		Return SetError(1,0)
+	EndIf
+	local $iArrayLength = UBound($aArray)
+	
+	local $sHeader = ""
+	$sHeader &= "Array Info:" & @CRLF
+	$sHeader &= "Length = " & $iArrayLength & @CRLF
+	ConsoleWrite($sHeader)
+	
+	local $sBody = ""
+	For $i = 0 To $iArrayLength-1
+		local $sType = VarGetType($aArray[$i])
+		
+		If $sType = 'Array' Then
+			$sBody &= StringFormat('| %d | [Array] |', $i) & @CRLF
+			
+		ElseIf $sType = 'Object' Then
+			$sBody &= StringFormat('| %d | {Object} |', $i) & @CRLF
+			
+		Else
+			$sBody &= StringFormat('| %d | %s |', String($aArray[$i])) & @CRLF
+		EndIf
+	Next
+	ConsoleWrite($sBody)
+	
 EndFunc
 
 
