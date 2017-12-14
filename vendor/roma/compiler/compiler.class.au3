@@ -90,6 +90,10 @@ endfunc
  @return:      void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_set_namespace($this)
+#Region Old
+;~ 	local $aFileList = _FileListToArrayRec('./dist',  '*.class.au3', 1, 1)
+;~ 	
+;~     for $i = 1 to UBound($aFileList) -1
 
 	For $file in $this.a_project_files
 		If Not StringRegExp($file.name, '(?i)\.class\.au3$') Then ContinueLoop
