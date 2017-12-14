@@ -57,11 +57,12 @@ endfunc
  Method: 		Private
  @return: 		void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
+Func _meth_get_project_files($this)
+	
 	local $aFileList = _FileListToArrayRec('.', '*|' & $this.s_exclude_files &'|' & $this.s_exclude_folder, 1, 1)
 
 	local $aProjectFiles = $roma_helper.Array()
 	For $i = 1 To $aFileList[0]
-
 		_ArrayAdd($aProjectFiles, $roma_helper.File($aFileList[$i]))
 	Next
 
@@ -76,8 +77,26 @@ endfunc
  @return:      void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_copy_files($this)
+	
+	local $aOldFiles = $roma_helper.Array()
+	If FileExists('.\dist') Then
+		$aOldFiles = _FileListToArrayRec('.\dist', '*', 1, 1)
+	EndIf
+	
 	For $item in $this.a_project_files
-		ConsoleWrite('Copying file "' & $item.name & '".' & @CRLF)		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
+		ConsoleWrite('Copying file "' & $item.name & '".' & @CRLF)
+		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
+		local $iIndex = _ArraySearch($aOldFiles, $item.name)
+		If $iIndex <> -1 Then
+			$aOldFiles[$iIndex] = Null
+		EndIf
+	Next
+	
+	For $i = 1 To UBound($aOldFiles)-1
+		If $aOldFiles[$i] <> Null Then
+			ConsoleWrite('Deleting old file ".\dist\' & $aOldFiles[$i] & '".' & @CRLF)
+			FileDelete('.\dist\' & $aOldFiles[$i])
+		EndIf
 	Next
 	
 	If Not FileExists($this.s_compiler_path & 'storage') then
@@ -95,7 +114,6 @@ endfunc
 func _meth_set_namespace($this)
 	For $file in $this.a_project_files
 		If Not StringRegExp($file.name, '(?i)\.class\.au3$') Then ContinueLoop
-
 		
 		local $hFile = FileOpen('dist\' & $file.name)
 		local $sFile = FileRead($hFile)
