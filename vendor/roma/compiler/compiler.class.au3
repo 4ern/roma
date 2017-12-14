@@ -57,13 +57,14 @@ endfunc
  Method: 		Private
  @return: 		void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
-func _meth_get_project_files($this)
-	
 	local $aFileList = _FileListToArrayRec('.', '*|' & $this.s_exclude_files &'|' & $this.s_exclude_folder, 1, 1)
+
 	local $aProjectFiles = $roma_helper.Array()
 	For $i = 1 To $aFileList[0]
+
 		_ArrayAdd($aProjectFiles, $roma_helper.File($aFileList[$i]))
 	Next
+
 	$this.a_project_files = $aProjectFiles
 	
 	Return $this
@@ -75,30 +76,8 @@ endfunc
  @return:      void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_copy_files($this)
-
-	; TODO: Remove old files from './dist/' before/after copying project files.
-	local $aOldFiles = _FileListToArrayRec('.\dist', '*', 1, 1)
-	If not @error Then
-		For $i = 1 To $aOldFiles[0]
-			Local $bInList = False
-			For $item in $this.a_project_files
-				If $item.name = $aOldFiles[$i] Then
-					$bInList = True
-				EndIf
-			Next
-			
-			If Not $bInList Then
-				ConsoleWrite('File "'&$aOldFiles[$i]&'" no longer available, removing it.' & @CRLF)
-				FileDelete('.\dist\' & $aOldFiles[$i])
-			EndIf
-		Next
-	EndIf
-	
-	
-	
 	For $item in $this.a_project_files
-		ConsoleWrite('Copying file "' & $item.name & '".' & @CRLF)
-		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
+		ConsoleWrite('Copying file "' & $item.name & '".' & @CRLF)		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
 	Next
 	
 	If Not FileExists($this.s_compiler_path & 'storage') then
@@ -114,26 +93,26 @@ endfunc
  @return:      void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_set_namespace($this)
-	
 	For $file in $this.a_project_files
 		If Not StringRegExp($file.name, '(?i)\.class\.au3$') Then ContinueLoop
-		ConsoleWrite('Parsing file "'&$file.name&'".' & @CRLF)
+
+		
 		local $hFile = FileOpen('dist\' & $file.name)
 		local $sFile = FileRead($hFile)
 		If @error Then
 			ConsoleWrite(StringFormat('Error reading file "%s": @error = %d, @extended = %d', $file.name, @error, @extended) & @CRLF)
 			ContinueLoop
 		EndIf
-		ConsoleWrite('Length of file: ' & StringLen($sFile) & @CRLF)
+
 		
 		; get namespace
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
 		local $aNamespace = StringRegExp($sFile,'(;use.)(.*)',2)
 		if IsArray($aNamespace) = 0 then ContinueLoop
 		local $sNamespace = $aNamespace[2]
-		ConsoleWrite('Found namespace: ' & $sNamespace & @CRLF)
+
 		
-		
+
 		; Bringe alle addmethod in eine einheitliche form
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
 		local $pattern  = '(?i)(.addmethod\()(.*)'
@@ -143,9 +122,6 @@ func _meth_set_namespace($this)
 			$a_method = $a_methods[$i]
 			$sFile = StringReplace($sFile, $a_method[0], StringStripWs($a_method[0], 8))
 		next
-		
-		; Show content for newly file
-;~ 		ConsoleWrite($sFile)
 
 		; set namespcae
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
@@ -158,13 +134,14 @@ func _meth_set_namespace($this)
 			$sFile = StringReplace($sFile, $a_method[0], $s_method)
 		Next
 
-		ConsoleWrite('Writing data to file "' & $file.name & '":' & @CRLF & $sFile & @CRLF)
+
 		Local $hFile = FileOpen('dist\' & $file.name, 2)
 		FileWrite($hFile, $sFile)
 		FileClose($hFile)
-		
+
 	Next
 	
 	Return $this
+
 
 endfunc
