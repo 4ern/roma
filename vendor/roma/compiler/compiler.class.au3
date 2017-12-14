@@ -80,6 +80,13 @@ func _meth_copy_files($this)
 		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
 	Next
 	
+	For $i = 1 To UBound($aOldFiles)-1
+		If $aOldFiles[$i] <> Null Then
+			ConsoleWrite('Deleting old file ".\dist\' & $aOldFiles[$i] & '".' & @CRLF)
+			FileDelete('.\dist\' & $aOldFiles[$i])
+		EndIf
+	Next
+	
 	If Not FileExists($this.s_compiler_path & 'storage') then
 		DirCreate($this.s_compiler_path & 'storage')
 	EndIf

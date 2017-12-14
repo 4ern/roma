@@ -1,5 +1,7 @@
 ;helper.class.au3
 
+#include-once
+
 #pragma Class(Compile, false)
 #pragma Class(Namespace, vendor_roma)
 
