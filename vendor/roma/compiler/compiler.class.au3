@@ -1,7 +1,6 @@
 #include-once
 #include "..\..\Autoit\File.au3"
 #include "..\..\Autoit\Array.au3"
-#include "..\..\AspirinJunkie\JSON.au3"
 #include '..\..\AutoItObject\AutoItObject.au3'
 #include '..\helper.class.au3'
 
@@ -49,7 +48,7 @@ func __constructor($this)
 
 	$this.get_project_files()
 	$this.copy_files()
-;~ 	$this.set_namespace()
+	$this.set_namespace()
 
 endfunc
 
@@ -57,11 +56,12 @@ endfunc
  Method: 		Private
  @return: 		void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
+func _meth_get_project_files($this)
+
 	local $aFileList = _FileListToArrayRec('.', '*|' & $this.s_exclude_files &'|' & $this.s_exclude_folder, 1, 1)
 
 	local $aProjectFiles = $roma_helper.Array()
 	For $i = 1 To $aFileList[0]
-
 		_ArrayAdd($aProjectFiles, $roma_helper.File($aFileList[$i]))
 	Next
 
@@ -76,8 +76,8 @@ endfunc
  @return:      void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_copy_files($this)
-	For $item in $this.a_project_files
-		ConsoleWrite('Copying file "' & $item.name & '".' & @CRLF)		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
+	For $item in $this.a_project_files	
+		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
 	Next
 	
 	If Not FileExists($this.s_compiler_path & 'storage') then
@@ -85,7 +85,6 @@ func _meth_copy_files($this)
 	EndIf
 		
 	Return $this
-	
 endfunc
 
 #cs :: get all *.class.au3 files
@@ -95,7 +94,6 @@ endfunc
 func _meth_set_namespace($this)
 	For $file in $this.a_project_files
 		If Not StringRegExp($file.name, '(?i)\.class\.au3$') Then ContinueLoop
-
 		
 		local $hFile = FileOpen('dist\' & $file.name)
 		local $sFile = FileRead($hFile)
@@ -104,14 +102,11 @@ func _meth_set_namespace($this)
 			ContinueLoop
 		EndIf
 
-		
 		; get namespace
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
 		local $aNamespace = StringRegExp($sFile,'(;use.)(.*)',2)
 		if IsArray($aNamespace) = 0 then ContinueLoop
 		local $sNamespace = $aNamespace[2]
-
-		
 
 		; Bringe alle addmethod in eine einheitliche form
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
@@ -123,18 +118,16 @@ func _meth_set_namespace($this)
 			$sFile = StringReplace($sFile, $a_method[0], StringStripWs($a_method[0], 8))
 		next
 
-
 		; set namespcae
 		; ───────────────────────────────────────────────────────────────────────────────────────────────
-		;~ local $pattern = '(?i)(\.addmethod\(.\w*.{3})(\w*)(?:.\))|(?:_AutoItObject_AddMethod\(\$\w*.{2}\w*.{3})(\w*)(?:.\))'
-		;~ local $a_methods = StringRegExp( StringStripWS($sFile, 8), $pattern, 4)
+		$pattern = '(?i)(\.addmethod\(.\w*.{3})(\w*)(?:.\))|(?:_AutoItObject_AddMethod\(\$\w*.{2}\w*.{3})(\w*)(?:.\))'
+		$a_methods = StringRegExp( StringStripWS($sFile, 8), $pattern, 4)
 
 		For $i = 0 to UBound($a_methods) -1
 			$a_method = $a_methods[$i]
-			$s_method = StringReplace($a_method[0], $a_method[2], '_' & $sNamespace & '__' & $a_method[2])
+			$s_method = StringReplace($a_method[0], $a_method[2], '_' & $sNamespace & '__' & $a_method[2], -1)
 			$sFile = StringReplace($sFile, $a_method[0], $s_method)
 		Next
-
 
 		Local $hFile = FileOpen('dist\' & $file.name, 2)
 		FileWrite($hFile, $sFile)
@@ -143,6 +136,4 @@ func _meth_set_namespace($this)
 	Next
 	
 	Return $this
-
-
 endfunc
