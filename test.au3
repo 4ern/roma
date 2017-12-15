@@ -3,9 +3,9 @@
 
 ;~ $roma_compiler()
 $roma_compiler.get_project_files()
-;~ $roma_compiler.copy_files()
+$roma_compiler.copy_files()
 ;~ $roma_compiler.set_namespace()
-$roma_helper.ArrayInfo( ($roma_compiler.a_project_files) )
+;~ $roma_helper.ArrayInfo( ($roma_compiler.a_project_files) )
 
 ;~ $roma_compiler.get_project_files()
 ;~ ConsoleWrite('Typeof $roma_compiler.a_project_files: ' & $roma_helper.TypeOf($roma_compiler.a_project_files) & @CRLF)

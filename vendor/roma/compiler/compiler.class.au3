@@ -78,14 +78,19 @@ endfunc
  @return:      void
 #ce ──────────────────────────────────────────────────────────────────────────────────────────────
 func _meth_copy_files($this)
+
+	local $aOldFiles = _FileListToArrayRec($this.s_compiler_path, '*', 1, 1)
+
 	For $item in $this.a_project_files	
 		FileCopy($item.name, $this.s_compiler_path & $item.name, 8 + 1)
+		local $iIndex = _ArraySearch($aOldFiles, $item.name)
+		If $iIndex <> -1 Then $aOldFiles[$iIndex] = Null
 	Next
 	
 	For $i = 1 To UBound($aOldFiles)-1
 		If $aOldFiles[$i] <> Null Then
-			ConsoleWrite('Deleting old file ".\dist\' & $aOldFiles[$i] & '".' & @CRLF)
-			FileDelete('.\dist\' & $aOldFiles[$i])
+			ConsoleWrite('Deleting old file "' & $this.s_compiler_path & $aOldFiles[$i] & '".' & @CRLF)
+			FileDelete($this.s_compiler_path & $aOldFiles[$i])
 		EndIf
 	Next
 	
