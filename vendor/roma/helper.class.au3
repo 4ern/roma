@@ -18,6 +18,7 @@ Func _Helper__new()
 		.AddMethod('TypeOf', '_Helper__typeof')
 		
 		.AddMethod('File', '_Helper_File__new')
+		.AddMethod('ClassObject', '_Helper_ClassObject__new')
 	EndWith
 	Return $class.Object
 EndFunc
@@ -86,4 +87,66 @@ Func _Helper_File__new($oSelf, $sFilePath = Default)
 		.AddProperty('datetime', $ELSCOPE_READONLY, ($sFilePath <> Default) ? FileGetTime($sFilePath, 0, 1) : Null)
 	EndWith
 	Return $class.Object
+EndFunc
+
+
+Func _Helper_ClassObject__new($oSelf, $sFilePath)
+
+	Local $sPragmaDirectives = 'compile|namespace'
+
+	If not FileExists($sFilePath) Then
+		Return SetError(1,0)
+	EndIf
+
+	Local $sFullPath = _PathFull($sFilePath)
+	Local $sDrive, $sDir, $sFileName, $sExtension
+	Local $aPathSplit = _PathSplit($sFullPath, $sDrive, $sDir, $sFileName, $sExtension)
+	Local $sClassName = StringReplace($sFileName, '.class', '', 1)
+
+	; loading file content
+	local $hFile = FileOpen($sFilePath)
+	local $sContent = FileRead($hFile)
+	FileClose($hFile)
+
+	; Parse content and find #pragma Class(Compile, True|False)
+	Local $bCompile = False
+	Local $sNamespace = ""
+	Local $aCompileRegExp = StringRegExp($sContent,'(?mi)^(?:\#pragma.class\()(' & $sPragmaDirectives & ')\s?\,\s?(.*)\).*$', 3)
+	If IsArray($aCompileRegExp) Then
+		For $i = 0 To UBound($aCompileRegExp)-1 Step 2
+			If StringLower($aCompileRegExp[$i]) = 'compile' Then
+				$bCompile = (StringLower($aCompileRegExp[$i+1]) = 'true') ? True : False
+			ElseIf StringLower($aCompileRegExp[$i]) = 'namespace' Then
+				$sNamespace = $aCompileRegExp[$i+1]
+			EndIf
+		Next
+	EndIf
+
+	
+
+	_AutoItObject_Startup()
+	local $class = _AutoItObject_Class()
+	With $class
+		.AddProperty('ClassName', $ELSCOPE_READONLY, $sClassName)
+		.AddProperty('Namespace', $ELSCOPE_READONLY, $sNamespace)
+		.AddProperty('Compile', $ELSCOPE_READONLY, $bCompile)
+		.AddProperty('ContentRaw', $ELSCOPE_READONLY, $sContent)
+		.AddProperty('ContentParsed', $ELSCOPE_READONLY, null)
+		.AddProperty('FileFullPath', $ELSCOPE_READONLY, $sFullPath)
+		.AddProperty('FileName', $ELSCOPE_READONLY, $sFileName)
+		.AddProperty('FileExtension', $ELSCOPE_READONLY, $sExtension)
+		.AddProperty('FileFolderPath', $ELSCOPE_READONLY, $sDrive & $sDir)
+		.AddMethod('Compile', '_Helper_ClassObject__compile')
+	EndWith
+	Return $class.Object
+EndFunc
+
+Func _Helper_ClassObject__compile($oSelf)
+	If $oSelf.Compile Then
+		; Do compile/translate stuff using $oSelf.ContentRaw
+
+		Return True
+	Else
+		Return SetError(1,0)
+	EndIf
 EndFunc

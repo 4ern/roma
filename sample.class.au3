@@ -1,5 +1,7 @@
 ; sample.class.au3
 ;use vendor_roma_core
+#Pragma Class(Compile, True)
+#Pragma Class(Namespace, roma_core)
 
 Func new($sPath = Default, $sLogLevel = 'debug')
 	_AutoItObject_StartUp()
